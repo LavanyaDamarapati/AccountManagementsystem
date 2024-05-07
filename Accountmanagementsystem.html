@@ -1,0 +1,97 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Account Management System</title>
+    <style>
+        /* Add your CSS styles here */
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Account Management System</h1>
+        <h2>Open a new current account</h2>
+        <form id="accountForm">
+            <label for="customerId">Customer ID:</label>
+            <input type="text" id="customerId" name="customerId" placeholder="Please enter Customer id">
+            <label for="initialCredit">Initial Credit:</label>
+            <input type="text" id="initialCredit" name="initialCredit" placeholder="Please enter initial Credit amount">
+            <button type="submit" onclick="openAccount()">Open Account</button>
+        </form>
+
+        <div id="customerInfo" style="margin-top: 20px;">
+            <!-- Customer information will be displayed here -->
+        </div>
+    </div>
+
+    <script>
+        function openAccount() {
+            event.preventDefault();
+
+            // Get form data
+            var customerId = document.getElementById("customerId").value;
+            var initialCredit = document.getElementById("initialCredit").value;
+
+            // Construct request body
+            var requestBody = {
+                customerId: customerId,
+                initialCredit: parseFloat(initialCredit)
+            };
+
+            // Send POST request to backend
+            fetch('http://localhost:8080/accounts', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestBody)
+            })
+            .then(response => response.text())
+            .then(data => {
+                // Show response message
+                alert(data);
+                // Clear form fields
+                document.getElementById("customerId").value = "";
+                document.getElementById("initialCredit").value = "";
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to open account. Please try again.');
+            });
+        }
+    </script>
+</body>
+</html>
